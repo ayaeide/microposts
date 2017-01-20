@@ -17,7 +17,24 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-
+  
+  def edit
+    @user = User.find(params[:id])
+  end
+  
+  def update
+    @user = User.find(params[:id])
+    @user.update(user_params)
+    if @user.update(user_params)
+    #成功した場合、ユーザーページにリダイレクト
+    redirect_to @user
+    else
+     flash[:alert] = "update failed"
+     render "edit"
+    end
+  end
+  
+  
   private
 
   def user_params
