@@ -24,8 +24,7 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    @user.update(user_params)
-    if @user.update(user_params)
+    if @user.update(user_profile)
     #成功した場合、ユーザーページにリダイレクト
     redirect_to @user
     else
@@ -40,6 +39,11 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:name, :email, :password,
                                  :password_confirmation)
+  end
+  
+  def user_profile
+    params.require(:user).permit(:name, :email, :password,
+                                 :password_confirmation, :biography)
   end
   
 end
