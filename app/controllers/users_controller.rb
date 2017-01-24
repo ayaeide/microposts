@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :logged_in_user, only: [:edit, :update]
   
   def show # 追加
    @user = User.find(params[:id])
@@ -17,13 +18,15 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-  
+
+
+#  http://servername/user/1/edit  
   def edit
-    @user = User.find(params[:id])
+    check_user
   end
   
   def update
-    @user = User.find(params[:id])
+    check_user
     if @user.update(user_profile)
     #成功した場合、ユーザーページにリダイレクト
     redirect_to @user
@@ -44,6 +47,13 @@ class UsersController < ApplicationController
   def user_profile
     params.require(:user).permit(:name, :email, :password,
                                  :password_confirmation, :biography)
+  end
+  
+  def check_user
+    @user = User.find(params[:id])
+    if (current_user != @user)
+      redirect_to root_path
+    end
   end
   
 end
